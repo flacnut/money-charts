@@ -5,16 +5,27 @@
     .module('money')
     .directive('fnDropTarget', dropTarget);
 
-  function dropTarget(TransactionService) {
+  function dropTarget() {
     return {
       restrict: 'E',
       template: '<div id="dropTarget" ng-transclude></div>',
+      controller: '@',
+      name: 'fnController',
       transclude: true,
-      link: function(scope, element) {
+      scope: {
+        handleDroppedFiles: '&fnOnDropped'
+      },
+      link: function(scope, element, attr, ctrl) {
         function handleDrop(event) {
           event.stopPropagation();
           event.preventDefault();
-          scope.fc.handleDroppedFiles(event.dataTransfer.files);
+
+          if (ctrl.hasOwnProperty('handleDroppedFiles') &&
+              typeof ctrl.handleDroppedFiles === 'function') {
+            ctrl.handleDroppedFiles(event.dataTransfer.files);
+          } else {
+            console.dir("No handleDroppedFiles function found!");
+          }
           scope.$apply();
         };
 

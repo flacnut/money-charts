@@ -1,0 +1,16 @@
+body {
+
+  div#dropTarget {
+    text-align: center;
+    border: 2px #d7d7d7 dashed;
+    border-radius: 10px;
+    line-height: 3.5;
+    margin-top: 20px;
+    box-sizing: border-box;
+
+    span#dropTargetText {
+      font-size: 3.0em;
+      color: #d7d7d7;
+    }
+  }
+}

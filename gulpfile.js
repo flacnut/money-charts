@@ -7,6 +7,8 @@ var fs = require('fs'),
   path = require('path'),
   sass = require('gulp-sass'),
   concat = require('gulp-concat'),
+  uglify = require('gulp-uglify'),
+  ngAnnotate = require('gulp-ng-annotate'),
   templateCache = require('gulp-angular-templatecache'),
   async = require('async');
 
@@ -25,12 +27,24 @@ var cssPaths = [
     wwwSrcPath + '/components/**/*.tmpl.html'
   ];
 
+var options = {
+  uglify: {
+    mangle: false,
+    compress: false // this doesn't seem to be working :/
+  }
+};
+
 // Task: clean-www
 // This task removes the build output. Even if multiple other tasks
 // depend on this, this will still only run once, and no other tasks
 // will run until it is complete.
 gulp.task('clean-www', function cleanWww(done) {
     del(wwwDropPath, done);
+});
+
+gulp.task('set-release-flags', function setReleaseFlags() {
+  options.uglify.mangle = true;
+  options.uglify.compress = true;
 });
 
 // Task: copy-index
@@ -59,7 +73,9 @@ gulp.task('copy-assets', ['clean-www'], function copyAssets() {
 gulp.task('concat-js', ['clean-www'], function concatJs() {
   return gulp
     .src(jsPaths)
-    .pipe(concat('dx-app.js'))
+    .pipe(concat('money.js'))
+    .pipe(ngAnnotate())
+    //.pipe(uglify(options.uglify))
     .pipe(gulp.dest(wwwDropPath + '/js'));
 });
 
@@ -70,7 +86,7 @@ gulp.task('concat-js', ['clean-www'], function concatJs() {
 // template.html file name, as the path tree is removed by the base function.
 gulp.task('generate-templates', ['clean-www'], function generateTemplates() {
   var options = {
-    module: 'dx-app',
+    module: 'money',
     base: function stripTmpl(file) {
       return path.basename(file.path).replace('.tmpl.html', '.html');
     }
@@ -78,7 +94,7 @@ gulp.task('generate-templates', ['clean-www'], function generateTemplates() {
 
   return gulp
     .src(tmplPaths)
-    .pipe(templateCache('dx-app-templates.js', options))
+    .pipe(templateCache('money-templates.js', options))
     .pipe(gulp.dest(wwwDropPath + '/js'));
 });
 
@@ -88,7 +104,7 @@ gulp.task('generate-templates', ['clean-www'], function generateTemplates() {
 gulp.task('generate-css', ['clean-www'], function generateCss() {
   return gulp
     .src(cssPaths)
-    .pipe(concat('dx-theme.css'))
+    .pipe(concat('theme.css'))
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest(wwwDropPath + '/css'));
 });
@@ -99,23 +115,10 @@ gulp.task('generate-css', ['clean-www'], function generateCss() {
 // task associated with the changed files, the output would still
 // be cleaned, and we would be left with an incomplete build output.
 gulp.task('watch', function watch() {
-  gulp.watch(jsPaths, ['build', 'test']);
-  gulp.watch(cssPaths, ['build', 'test']);
-  gulp.watch(tmplPaths, ['build', 'test']);
-  //gulp.watch(testPaths, ['test']);
-});
-
-// Task: test
-// Executes a single run of Karma tests on the UX using PhantomJs.
-gulp.task('test', function test(done) {
-  karma.start({
-      configFile: __dirname + '/test/www/karma.conf.js',
-      singleRun: true
-    }, function ignoreKarma(ignore) {
-      // Prevent the karma results getting passed into done
-      // as gulp miss-handles it.
-      done();
-    });
+  gulp.watch(jsPaths, ['build']);
+  gulp.watch(cssPaths, ['build']);
+  gulp.watch(tmplPaths, ['build']);
+  gulp.watch(wwwSrcPath + '/index.html', ['build']);
 });
 
 // Task: live-debug
@@ -144,5 +147,7 @@ gulp.task('live-debug', function liveDebug(done) {
 // Order specific operations should either be done in one task, or placed
 // as a dependency of one of these tasks.
 gulp.task('build', ['copy-index', 'copy-assets', 'concat-js', 'generate-templates', 'generate-css']);
+
+gulp.task('build-release', ['set-release-flags', 'copy-index', 'copy-assets', 'concat-js', 'generate-templates', 'generate-css']);
 
 gulp.task('default', ['build']);
