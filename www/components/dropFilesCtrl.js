@@ -5,11 +5,24 @@
     .module('money')
     .controller('dropFilesCtrl', dropFilesCtrl);
 
+  /**
+   * The Controller to handle behavior on dropped files.
+   * @class dropFilesCtrl 
+   * @param {} transactionsFactory
+   * @return CallExpression
+   */
   function dropFilesCtrl(transactionsFactory) {
     return angular.extend(this, {
-      handleDroppedFiles: function(files) {
-        console.dir(files);
-      }
+      handleDroppedFiles: handleDroppedFiles
     });
+
+    /**
+     * Description
+     * @method handleDroppedFiles
+     * @param {} files
+     */
+    function handleDroppedFiles(files) {
+      console.dir(files);
+    }
   }
 })(window, document, angular);

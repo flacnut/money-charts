@@ -5,6 +5,11 @@
     .module('money')
     .factory('transactionsFactory', transactionsFactory);
 
+  /**
+   * Description
+   * @method transactionsFactory
+   * @return CallExpression
+   */
   function transactionsFactory() {
     var self = this;
 
@@ -12,6 +17,11 @@
       importTransactions: importTransactions
     });
 
+    /**
+     * Description
+     * @method importTransactions
+     * @param {} fileOfTransactions
+     */
     function importTransactions(fileOfTransactions) {
       console.dir(fileOfTransactions);
     }

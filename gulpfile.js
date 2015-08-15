@@ -6,14 +6,18 @@ var fs = require('fs'),
   gutil = require('gulp-util'),
   path = require('path'),
   sass = require('gulp-sass'),
+  jsdoc = require('gulp-jsdoc'),
   concat = require('gulp-concat'),
   uglify = require('gulp-uglify'),
+  rename = require('gulp-rename'),
   ngAnnotate = require('gulp-ng-annotate'),
+  gulpJsdoc2md = require("gulp-jsdoc-to-markdown"),
   templateCache = require('gulp-angular-templatecache'),
   async = require('async');
 
 var wwwSrcPath = 'www',
-  wwwDropPath = 'release';
+  wwwDropPath = 'release',
+  docPath = 'docs';
 
 var cssPaths = [
     wwwSrcPath + '/**/*.scss'
@@ -34,14 +38,25 @@ var options = {
   }
 };
 
-// Task: clean-www
+// Task: clean
 // This task removes the build output. Even if multiple other tasks
 // depend on this, this will still only run once, and no other tasks
 // will run until it is complete.
-gulp.task('clean-www', function cleanWww(done) {
-    del(wwwDropPath, done);
+gulp.task('clean', function cleanWww(done) {
+  async.parallel([deleteRelease, deleteDocs], done);
+
+    function deleteRelease(cb) {
+      del(wwwDropPath, cb);
+    }
+
+    function deleteDocs(cb) {
+      del(docPath, cb);
+    }
 });
 
+// Task: set-release-flags
+// Set configuration options that will be used to change
+// the build process specifically for releases.
 gulp.task('set-release-flags', function setReleaseFlags() {
   options.uglify.mangle = true;
   options.uglify.compress = true;
@@ -50,7 +65,7 @@ gulp.task('set-release-flags', function setReleaseFlags() {
 // Task: copy-index
 // Copies the static index.html file to the dist path. This is separate
 // from copying assets, as assets are static files we never wish to change.
-gulp.task('copy-index', ['clean-www'], function copyIndex() {
+gulp.task('copy-index', ['clean'], function copyIndex() {
   return gulp
     .src(wwwSrcPath + '/index.html')
     .pipe(gulp.dest(wwwDropPath));
@@ -60,7 +75,7 @@ gulp.task('copy-index', ['clean-www'], function copyIndex() {
 // Copy static files to the dist path. Assets are files that will not
 // ever be modified as part of copying. These include third-party libs,
 // images, fonts, icons, and css.
-gulp.task('copy-assets', ['clean-www'], function copyAssets() {
+gulp.task('copy-assets', ['clean'], function copyAssets() {
   return gulp
     .src(wwwSrcPath + '/assets/**/*')
     .pipe(gulp.dest(wwwDropPath));
@@ -70,7 +85,7 @@ gulp.task('copy-assets', ['clean-www'], function copyAssets() {
 // Concatenate all of our javascript files together. This reduces the
 // load time for the page, and also negates the need for adding more
 // scripts to the index.html everytime a new view is added.
-gulp.task('concat-js', ['clean-www'], function concatJs() {
+gulp.task('concat-js', ['clean'], function concatJs() {
   return gulp
     .src(jsPaths)
     .pipe(concat('money.js'))
@@ -84,9 +99,15 @@ gulp.task('concat-js', ['clean-www'], function concatJs() {
 // This file is included in the application, and prevents templates from
 // being individually fetched. All templates are referenced only by their
 // template.html file name, as the path tree is removed by the base function.
-gulp.task('generate-templates', ['clean-www'], function generateTemplates() {
+gulp.task('generate-templates', ['clean'], function generateTemplates() {
   var options = {
     module: 'money',
+    /**
+     * Description
+     * @method base
+     * @param {} file
+     * @return CallExpression
+     */
     base: function stripTmpl(file) {
       return path.basename(file.path).replace('.tmpl.html', '.html');
     }
@@ -101,12 +122,27 @@ gulp.task('generate-templates', ['clean-www'], function generateTemplates() {
 // Task: generate-css
 // Compile our scss code into css, and place the files in the css
 // directory with other third-party css libraries.
-gulp.task('generate-css', ['clean-www'], function generateCss() {
+gulp.task('generate-css', ['clean'], function generateCss() {
   return gulp
     .src(cssPaths)
     .pipe(concat('theme.css'))
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest(wwwDropPath + '/css'));
+});
+
+// Task: generate-docs
+// Use JSDoc to create documentation for the javascript files. Doc
+// stubs can be generated using smartcomments command line util.
+gulp.task('generate-docs', ['clean'], function generateDocs() {
+  return gulp.src(jsPaths)
+        .pipe(gulpJsdoc2md())
+        .on("error", function onJsdocErr(err){
+            gutil.log(gutil.colors.red("jsdoc2md failed"), err.message)
+        })
+        .pipe(rename(function onRename(path){
+            path.extname = ".md";
+        }))
+        .pipe(gulp.dest(docPath));
 });
 
 // Task: watch
@@ -146,8 +182,8 @@ gulp.task('live-debug', function liveDebug(done) {
 // These tasks are *not* order specific, and may be run in any order.
 // Order specific operations should either be done in one task, or placed
 // as a dependency of one of these tasks.
-gulp.task('build', ['copy-index', 'copy-assets', 'concat-js', 'generate-templates', 'generate-css']);
+gulp.task('build', ['copy-index', 'copy-assets', 'concat-js', 'generate-templates', 'generate-css', 'generate-docs']);
 
-gulp.task('build-release', ['set-release-flags', 'copy-index', 'copy-assets', 'concat-js', 'generate-templates', 'generate-css']);
+gulp.task('build-release', ['set-release-flags','build']);
 
 gulp.task('default', ['build']);

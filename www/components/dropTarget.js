@@ -5,6 +5,11 @@
     .module('money')
     .directive('fnDropTarget', dropTarget);
 
+  /**
+   * Description
+   * @method dropTarget
+   * @return ObjectExpression
+   */
   function dropTarget() {
     return {
       restrict: 'E',
@@ -15,7 +20,20 @@
       scope: {
         handleDroppedFiles: '&fnOnDropped'
       },
+      /**
+       * Description
+       * @method link
+       * @param {} scope
+       * @param {} element
+       * @param {} attr
+       * @param {} ctrl
+       */
       link: function(scope, element, attr, ctrl) {
+        /**
+         * Description
+         * @method handleDrop
+         * @param {} event
+         */
         function handleDrop(event) {
           event.stopPropagation();
           event.preventDefault();
@@ -29,6 +47,11 @@
           scope.$apply();
         };
 
+        /**
+         * Description
+         * @method handleDragOver
+         * @param {} event
+         */
         function handleDragOver(event) {
           event.stopPropagation();
           event.preventDefault();
