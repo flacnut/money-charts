@@ -1,18 +1,22 @@
+## Classes
+<dl>
+<dt><a href="#transactionsFactory">transactionsFactory</a></dt>
+<dd></dd>
+</dl>
 ## Functions
 <dl>
-<dt><a href="#transactionsFactory">transactionsFactory()</a> ⇒</dt>
-<dd><p>Description</p>
-</dd>
 <dt><a href="#importTransactions">importTransactions(fileOfTransactions)</a></dt>
 <dd><p>Description</p>
 </dd>
 </dl>
 <a name="transactionsFactory"></a>
-## transactionsFactory() ⇒
+## transactionsFactory
+**Kind**: global class  
+<a name="new_transactionsFactory_new"></a>
+### new transactionsFactory()
 Description
 
-**Kind**: global function  
-**Returns**: CallExpression  
+**Returns**: A transactionFactory  
 <a name="importTransactions"></a>
 ## importTransactions(fileOfTransactions)
 Description

@@ -7,8 +7,8 @@
 
   /**
    * Description
-   * @method transactionsFactory
-   * @return CallExpression
+   * @class transactionsFactory
+   * @return A transactionFactory
    */
   function transactionsFactory() {
     var self = this;

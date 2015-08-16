@@ -1,0 +1,18 @@
+<div>
+  <span id="dropTargetText" ng-transclude></span>
+
+  <div id="droppedFilesList" class="row">
+    <div ng-repeat="file in targetCtrl.files" class="droppedFile col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1">
+      <div class="row">
+        <div class="col-lg-6 col-md-6">{{ file.name }}</div>
+        <div class="col-lg-2 col-md-1 text-right">{{ file.size | bytesFormatter }}</div>
+        <div class="col-lg-4 col-md-3">
+          <span class="pull-right">
+            <button ng-click="targetCtrl.chooseFile(file)" class="primary"><i class="fa fa-flash"></i> Import</button>
+            <button ng-click="targetCtrl.removeFile(file)" class="danger"><i class="fa fa-times"></i> Remove</button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
