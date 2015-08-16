@@ -35,7 +35,14 @@
     }
 
     function chooseFile(file) {
-      console.dir(file);
+      transactionsFactory
+        .importFile(file)
+        .then(function onSuccess() {
+          removeFile(file);
+        })
+        .catch(function onError(error) {
+          file.error = error.message || error;
+        });
     }
 
     function removeFile(file) {
