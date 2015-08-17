@@ -1,0 +1,10 @@
+<div>
+  <div class="row" ng-repeat="transaction in listCtrl.transactions">
+    <div class="col-lg-6 col-md-5" title="{{ transaction.raw.description }}">{{ transaction.description }}</div>
+    <div class="col-lg-1 col-md-1">{{ transaction.amount | currency }}</div>
+    <div class="col-lg-1 col-md-2">{{ transaction.location.region }}</div>
+    <div class="col-lg-1 col-md-1">{{ transaction.location.state }}</div>
+    <div class="col-lg-1 col-md-1">{{ transaction.location.country }}</div>
+    <div class="col-lg-1 col-md-2">{{ transaction.date.date }}</div>
+  </div>
+</div>

@@ -1,11 +1,15 @@
-## Classes
-<dl>
-<dt><a href="#dropFilesCtrl">dropFilesCtrl</a></dt>
-<dd></dd>
-</dl>
 ## Functions
 <dl>
-<dt><a href="#handleDroppedFiles">handleDroppedFiles(files)</a></dt>
+<dt><a href="#dropTargetCtrl">dropTargetCtrl(transactionsFactory, _)</a> ⇒</dt>
+<dd><p>The Controller to handle behavior on dropped files.</p>
+</dd>
+<dt><a href="#handleDroppedFiles">handleDroppedFiles(droppedFiles)</a></dt>
+<dd><p>Description</p>
+</dd>
+<dt><a href="#chooseFile">chooseFile(file)</a></dt>
+<dd><p>Description</p>
+</dd>
+<dt><a href="#removeFile">removeFile(file)</a></dt>
 <dd><p>Description</p>
 </dd>
 <dt><a href="#dropTarget">dropTarget()</a> ⇒</dt>
@@ -21,28 +25,47 @@
 <dd><p>Description</p>
 </dd>
 </dl>
-<a name="dropFilesCtrl"></a>
-## dropFilesCtrl
-**Kind**: global class  
-<a name="new_dropFilesCtrl_new"></a>
-### new dropFilesCtrl(transactionsFactory)
+<a name="dropTargetCtrl"></a>
+## dropTargetCtrl(transactionsFactory, _) ⇒
 The Controller to handle behavior on dropped files.
 
+**Kind**: global function  
 **Returns**: CallExpression  
 
 | Param |
 | --- |
 | transactionsFactory | 
+| _ | 
 
 <a name="handleDroppedFiles"></a>
-## handleDroppedFiles(files)
+## handleDroppedFiles(droppedFiles)
 Description
 
 **Kind**: global function  
 
 | Param |
 | --- |
-| files | 
+| droppedFiles | 
+
+<a name="chooseFile"></a>
+## chooseFile(file)
+Description
+
+**Kind**: global function  
+
+| Param |
+| --- |
+| file | 
+
+<a name="removeFile"></a>
+## removeFile(file)
+Description
+
+**Kind**: global function  
+
+| Param |
+| --- |
+| file | 
 
 <a name="dropTarget"></a>
 ## dropTarget() ⇒

@@ -6,6 +6,11 @@
     .filter('bytesFormatter', bytesFormatter);
 
   // Filter: usage {{ file.fileObj.size | bytesFormatter }}
+  /**
+   * Description
+   * @method bytesFormatter
+   * @return FunctionExpression
+   */
   function bytesFormatter() {
     return function format(input) {
       var result = +input;

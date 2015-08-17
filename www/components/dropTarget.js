@@ -7,11 +7,13 @@
     .controller('dropTargetCtrl', dropTargetCtrl);
 
   /**
-  * The Controller to handle behavior on dropped files.
-  * @class dropFilesCtrl
-  * @param {} transactionsFactory
-  * @return CallExpression
-  */
+   * The Controller to handle behavior on dropped files.
+   * @class dropFilesCtrl
+   * @method dropTargetCtrl
+   * @param {} transactionsFactory
+   * @param {} _
+   * @return CallExpression
+   */
   function dropTargetCtrl(transactionsFactory, _) {
     var files = [];
 
@@ -26,7 +28,7 @@
     /**
      * Description
      * @method handleDroppedFiles
-     * @param {} files
+     * @param {} droppedFiles
      */
     function handleDroppedFiles(droppedFiles) {
       angular.forEach(droppedFiles, function withFile(file) {
@@ -34,6 +36,11 @@
       });
     }
 
+    /**
+     * Description
+     * @method chooseFile
+     * @param {} file
+     */
     function chooseFile(file) {
       transactionsFactory
         .importFile(file)
@@ -45,6 +52,11 @@
         });
     }
 
+    /**
+     * Description
+     * @method removeFile
+     * @param {} file
+     */
     function removeFile(file) {
       _.remove(files, file);
     }

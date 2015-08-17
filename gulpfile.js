@@ -45,10 +45,22 @@ var options = {
 gulp.task('clean', function cleanWww(done) {
   async.parallel([deleteRelease, deleteDocs], done);
 
+    /**
+     * Description
+     * @method deleteRelease
+     * @param {} cb
+     * @return
+     */
     function deleteRelease(cb) {
       del(wwwDropPath, cb);
     }
 
+    /**
+     * Description
+     * @method deleteDocs
+     * @param {} cb
+     * @return
+     */
     function deleteDocs(cb) {
       del(docPath, cb);
     }
