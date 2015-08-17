@@ -14,9 +14,20 @@
    * @param {} _
    */
   function transactionsListCtrl(transactionsFactory, _) {
-    angular.extend(this, {
-      transactions: transactionsFactory.transactions
+    var self = this;
+    
+    angular.extend(self, {
+      transactions: transactionsFactory.transactions,
+      filteredTransactions: [],
+
+      getSum: getSum
     });
+
+    function getSum() {
+      return _.sum(self.filteredTransactions, function(t) {
+        return t.amount;
+      });
+    }
   }
 
   /**

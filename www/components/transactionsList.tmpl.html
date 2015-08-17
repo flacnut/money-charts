@@ -1,15 +1,18 @@
 <div>
   <div class="row filter">
-    <div class="col-lg-12 col-md-12">
+    <div class="col-lg-9 col-md-9">
       <input type="text" ng-model="transactionsFilter" />
     </div>
+    <div class="col-lg-3 col-md-3">
+      Sum: <span>{{ listCtrl.getSum() }}</span>
+    </div>
   </div>
-  <div class="row" ng-repeat="transaction in listCtrl.transactions | filter : transactionsFilter : strict">
+  <div class="row" ng-repeat="transaction in (listCtrl.filteredTransactions = (listCtrl.transactions | filter : transactionsFilter : strict))">
     <div class="col-lg-6 col-md-4" title="{{ transaction.raw.description }}">{{ transaction.description }}</div>
-    <div class="col-lg-1 col-md-1">{{ transaction.amount | currency }}</div>
-    <div class="col-lg-1 col-md-2">{{ transaction.location.region }}</div>
-    <div class="col-lg-1 col-md-1">{{ transaction.location.state }}</div>
-    <div class="col-lg-1 col-md-1">{{ transaction.location.country }}</div>
-    <div class="col-lg-2 col-md-3">{{ transaction.date.date }}</div>
+    <div class="col-lg-1 col-md-1 align-right">{{ transaction.amount | currency }}</div>
+    <div class="col-lg-1 col-md-2 align-right">{{ transaction.location.region }}</div>
+    <div class="col-lg-1 col-md-1 align-right">{{ transaction.location.state }}</div>
+    <div class="col-lg-1 col-md-1 align-right">{{ transaction.location.country }}</div>
+    <div class="col-lg-2 col-md-3 align-right">{{ transaction.date.date | date:'shortDate' }}</div>
   </div>
 </div>
