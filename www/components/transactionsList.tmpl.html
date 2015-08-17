@@ -1,10 +1,15 @@
 <div>
-  <div class="row" ng-repeat="transaction in listCtrl.transactions">
-    <div class="col-lg-6 col-md-5" title="{{ transaction.raw.description }}">{{ transaction.description }}</div>
+  <div class="row filter">
+    <div class="col-lg-12 col-md-12">
+      <input type="text" ng-model="transactionsFilter" />
+    </div>
+  </div>
+  <div class="row" ng-repeat="transaction in listCtrl.transactions | filter : transactionsFilter : strict">
+    <div class="col-lg-6 col-md-4" title="{{ transaction.raw.description }}">{{ transaction.description }}</div>
     <div class="col-lg-1 col-md-1">{{ transaction.amount | currency }}</div>
     <div class="col-lg-1 col-md-2">{{ transaction.location.region }}</div>
     <div class="col-lg-1 col-md-1">{{ transaction.location.state }}</div>
     <div class="col-lg-1 col-md-1">{{ transaction.location.country }}</div>
-    <div class="col-lg-1 col-md-2">{{ transaction.date.date }}</div>
+    <div class="col-lg-2 col-md-3">{{ transaction.date.date }}</div>
   </div>
 </div>

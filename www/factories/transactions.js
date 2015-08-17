@@ -106,7 +106,7 @@
      * @return CallExpression
      */
     function processTransaction(transactionStr) {
-      var columns = transactionStr.split(','),
+      var columns = transactionStr.replace(/"/g, '').split(','),
         transactionObj = {
           tags: [],
           raw: {
