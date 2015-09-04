@@ -4,7 +4,7 @@
   "description": "Plotting Excel spreadsheets using highcharts.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cp -r Marymoore\/ m && cp -r Marymoore\/ m2 && exit 0"
   },
   "author": "Adam Sheldon (flacnut)",
   "license": "ISC",
